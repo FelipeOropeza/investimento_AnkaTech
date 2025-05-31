@@ -1,20 +1,21 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.ts",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "backend": "file:",
-    "fastify": "^4.0.0",
-    "zod": "^3.25.42"
+    "fastify": "^5.3.3",
+    "zod": "^3.25.42",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
     "prisma": "^6.8.2",

@@ -1,9 +1,6 @@
 import { FastifyInstance } from "fastify";
-import {
-  createClientHandler,
-  listClientsHandler,
-  updateClientHandler,
-} from "../controllers/client.controller";
+import { zodToJsonSchema } from "zod-to-json-schema";
+import { createClientHandler, listClientsHandler, updateClientHandler } from "../controllers/client.controller";
 import { createClientSchema } from "../schemas/client.schema";
 
 export async function clientRoutes(server: FastifyInstance) {
@@ -11,7 +8,7 @@ export async function clientRoutes(server: FastifyInstance) {
     "/clients",
     {
       schema: {
-        body: createClientSchema,
+        body: zodToJsonSchema(createClientSchema),
       },
     },
     createClientHandler
@@ -23,7 +20,7 @@ export async function clientRoutes(server: FastifyInstance) {
     "/clients/:id",
     {
       schema: {
-        body: createClientSchema,
+        body: zodToJsonSchema(createClientSchema),
       },
     },
     updateClientHandler
