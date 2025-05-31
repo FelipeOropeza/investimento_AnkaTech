@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: investdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - '3001:3001'
+      - '5555:5555' 
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "mysql://user:password@db:3306/investdb"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
