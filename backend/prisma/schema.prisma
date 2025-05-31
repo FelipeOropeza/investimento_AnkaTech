@@ -7,9 +7,25 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Client {
-  id          Int          @id @default(autoincrement())
-  name        String
-  email       String       @unique
-  status      String
+enum Status {
+  ativo
+  inativo
+}
+
+model Cliente {
+  id       Int     @id @default(autoincrement())
+  nome     String
+  email    String  @unique
+  status   Status
+
+  ativos   Ativo[]
+}
+
+model Ativo {
+  id          Int     @id @default(autoincrement())
+  nome        String
+  valorAtual  Float
+
+  clienteId   Int
+  cliente     Cliente @relation(fields: [clienteId], references: [id])
 }

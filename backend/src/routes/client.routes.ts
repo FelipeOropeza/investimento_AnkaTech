@@ -1,0 +1,31 @@
+import { FastifyInstance } from "fastify";
+import {
+  createClientHandler,
+  listClientsHandler,
+  updateClientHandler,
+} from "../controllers/client.controller";
+import { createClientSchema } from "../schemas/client.schema";
+
+export async function clientRoutes(server: FastifyInstance) {
+  server.post(
+    "/clients",
+    {
+      schema: {
+        body: createClientSchema,
+      },
+    },
+    createClientHandler
+  );
+
+  server.get("/clients", listClientsHandler);
+
+  server.put(
+    "/clients/:id",
+    {
+      schema: {
+        body: createClientSchema,
+      },
+    },
+    updateClientHandler
+  );
+}
