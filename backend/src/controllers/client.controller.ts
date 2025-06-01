@@ -1,17 +1,28 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import prisma from "../prismaClient";
-import { CreateClientInput } from "../schemas/client.schema";
+import { createClientSchema } from "../schemas/client.schema";
 
 export async function createClientHandler(
-  request: FastifyRequest<{ Body: CreateClientInput }>,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
+  const parse = createClientSchema.safeParse(request.body);
+
+  if (!parse.success) {
+    const erros = parse.error.errors.map((err) => ({
+      campo: err.path[0],
+      mensagem: err.message,
+    }));
+    return reply.code(400).send({ erros });
+  }
+
   try {
     const client = await prisma.cliente.create({
-      data: request.body,
+      data: parse.data,
     });
     return reply.code(201).send(client);
   } catch (error) {
+    console.error(error);
     return reply.code(500).send({ message: "Erro ao criar cliente." });
   }
 }
@@ -25,17 +36,28 @@ export async function listClientsHandler(
 }
 
 export async function updateClientHandler(
-  request: FastifyRequest<{ Params: { id: string }; Body: CreateClientInput }>,
+  request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) {
   const id = Number(request.params.id);
+
+  const parse = createClientSchema.safeParse(request.body);
+  if (!parse.success) {
+    const erros = parse.error.errors.map((err) => ({
+      campo: err.path[0],
+      mensagem: err.message,
+    }));
+    return reply.code(400).send({ erros });
+  }
+
   try {
     const client = await prisma.cliente.update({
       where: { id },
-      data: request.body,
+      data: parse.data,
     });
     return reply.send(client);
   } catch (error) {
+    console.error(error);
     return reply.code(404).send({ message: "Cliente não encontrado." });
   }
 }
