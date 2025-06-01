@@ -1,12 +1,10 @@
 import { FastifyInstance } from "fastify";
-
-const ativosFixos = [
-  { nome: "Ação XYZ", valor: 100.0 },
-  { nome: "Fundo ABC", valor: 200.0 },
-];
+import {
+  createAssetHandler,
+  listAssetsHandler,
+} from "../controllers/asset.controller";
 
 export async function assetRoutes(server: FastifyInstance) {
-  server.get("/ativos", async (request, reply) => {
-    return reply.send(ativosFixos);
-  });
+  server.post("/assets", createAssetHandler);
+  server.get("/assets", listAssetsHandler);
 }
