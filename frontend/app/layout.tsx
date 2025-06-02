@@ -9,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt">
-      <body className="overflow-auto">
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
