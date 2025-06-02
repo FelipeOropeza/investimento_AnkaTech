@@ -35,11 +35,41 @@ export async function listClientsHandler(
   return reply.send(clients);
 }
 
+export async function getByClientsHandler(
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  const id = Number(request.params.id);
+
+  if (isNaN(id)) {
+    return reply.code(400).send({ message: "ID inválido" });
+  }
+
+  try {
+    const client = await prisma.cliente.findUnique({
+      where: { id },
+    });
+
+    if (!client) {
+      return reply.code(404).send({ message: "Cliente não encontrado" });
+    }
+
+    return reply.send(client);
+  } catch (error) {
+    console.error(error);
+    return reply.code(500).send({ message: "Erro ao buscar cliente." });
+  }
+}
+
 export async function updateClientHandler(
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) {
   const id = Number(request.params.id);
+
+  if (isNaN(id)) {
+    return reply.code(400).send({ message: "ID inválido" });
+  }
 
   const parse = createClientSchema.safeParse(request.body);
   if (!parse.success) {
