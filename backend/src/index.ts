@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import cors from '@fastify/cors';
 import { clientRoutes } from "./routes/client.routes";
 import { assetRoutes } from "./routes/asset.routes";
 
@@ -6,6 +7,11 @@ const server = Fastify();
 
 server.register(clientRoutes);
 server.register(assetRoutes);
+
+server.register(cors, {
+  origin: 'http://localhost:3000',
+  credentials: true,
+});
 
 const start = async () => {
   try {
