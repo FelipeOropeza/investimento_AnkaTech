@@ -11,7 +11,7 @@ export const clienteSchema = z.object({
 export type FormData = z.infer<typeof clienteSchema>;
 
 export type Cliente = {
-  id: string;
+  id: number;
   nome: string;
   email: string;
   status: 'ativo' | 'inativo';

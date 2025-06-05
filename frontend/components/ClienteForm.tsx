@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Portal } from "@radix-ui/react-portal"; // Importar Portal
+import { Portal } from "@radix-ui/react-portal";
 
 export function ClienteForm({ cliente }: { cliente?: Cliente }) {
   const router = useRouter();
@@ -109,7 +109,7 @@ export function ClienteForm({ cliente }: { cliente?: Cliente }) {
           )}
         />
 
-        <Button type="submit">Salvar</Button>
+        <Button variant="outline" type="submit">Salvar</Button>
       </form>
     </Form>
   );

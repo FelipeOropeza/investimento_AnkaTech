@@ -33,16 +33,7 @@ export default function ClientesPage() {
       const response = await api.get<Ativo[]>(`/clients/${ativosVisiveis}/assets`);
       return response.data;
     },
-    enabled: !!ativosVisiveis, // só busca quando abrir
-  });
-
-  const { mutate: ativarCliente } = useMutation({
-    mutationFn: async (id: number) => {
-      await api.patch(`/clients/${id}`, { status: 'ativo' });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clientes'] });
-    },
+    enabled: !!ativosVisiveis,
   });
 
   if (isLoading) return <p>Carregando...</p>;
@@ -51,7 +42,7 @@ export default function ClientesPage() {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Clientes</h1>
-        <Button asChild>
+        <Button variant="outline" asChild>
           <Link href="/clientes/novo">Adicionar Cliente</Link>
         </Button>
       </div>
@@ -82,16 +73,8 @@ export default function ClientesPage() {
                   <Link href={`/clientes/${cliente.id}`}>Editar</Link>
                 </Button>
 
-                {cliente.status !== 'ativo' && (
-                  <Button
-                    onClick={() => ativarCliente(cliente.id)}
-                  >
-                    Ativar
-                  </Button>
-                )}
-
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   onClick={() =>
                     setAtivosVisiveis(
                       ativosVisiveis === cliente.id ? null : cliente.id
@@ -117,7 +100,7 @@ export default function ClientesPage() {
                       >
                         <span>{ativo.nome}</span>
                         <span className="font-semibold">
-                          € {ativo.valorAtual.toFixed(2)}
+                          R$ {ativo.valorAtual.toFixed(2)}
                         </span>
                       </li>
                     ))}
@@ -130,9 +113,10 @@ export default function ClientesPage() {
                 <Button
                   size="sm"
                   className="mt-2"
+                  variant="outline"
                   asChild
                 >
-                  <Link href={`/clientes/${cliente.id}/ativos/novo`}>
+                  <Link href={`/ativos/${cliente.id}`}>
                     Adicionar Ativo
                   </Link>
                 </Button>
