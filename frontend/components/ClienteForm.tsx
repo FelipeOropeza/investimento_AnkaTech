@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { clienteSchema, Cliente, FormData } from '@/types/cliente';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { clienteSchema, Cliente, FormData } from "@/types/cliente";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
-import { api } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+} from "./ui/select";
+import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -21,9 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
-import { Portal } from '@radix-ui/react-portal'; // Importar Portal
+import { Portal } from "@radix-ui/react-portal"; // Importar Portal
 
 export function ClienteForm({ cliente }: { cliente?: Cliente }) {
   const router = useRouter();
@@ -31,9 +31,9 @@ export function ClienteForm({ cliente }: { cliente?: Cliente }) {
   const form = useForm<FormData>({
     resolver: zodResolver(clienteSchema),
     defaultValues: {
-      nome: cliente?.nome ?? '',
-      email: cliente?.email ?? '',
-      status: cliente?.status ?? 'ativo',
+      nome: cliente?.nome ?? "",
+      email: cliente?.email ?? "",
+      status: cliente?.status ?? "ativo",
     },
   });
 
@@ -41,9 +41,9 @@ export function ClienteForm({ cliente }: { cliente?: Cliente }) {
     if (cliente?.id) {
       await api.put(`/clients/${cliente.id}`, data);
     } else {
-      await api.post('/clients', data);
+      await api.post("/clients", data);
     }
-    router.push('/clients');
+    router.push("/clientes");
   };
 
   return (
@@ -90,15 +90,15 @@ export function ClienteForm({ cliente }: { cliente?: Cliente }) {
                 value={field.value}
                 onValueChange={field.onChange}
                 defaultValue={field.value}
+                aria-labelledby="status"
               >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o status" />
                   </SelectTrigger>
                 </FormControl>
-                {/* Portal garante o dropdown renderizar no topo do DOM */}
                 <Portal>
-                  <SelectContent className="z-[9999]">
+                  <SelectContent className="z-[9999] bg-white border border-gray-300 rounded shadow-lg mt-1">
                     <SelectItem value="ativo">Ativo</SelectItem>
                     <SelectItem value="inativo">Inativo</SelectItem>
                   </SelectContent>
