@@ -11,6 +11,7 @@ server.register(assetRoutes);
 server.register(cors, {
   origin: 'http://localhost:3000',
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 });
 
 const start = async () => {

@@ -61,6 +61,30 @@ export async function getByClientsHandler(
   }
 }
 
+export async function listAssetsByClientHandler(
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  const id = Number(request.params.id);
+
+  if (isNaN(id)) {
+    return reply.code(400).send({ message: "ID inválido" });
+  }
+
+  try {
+    const ativos = await prisma.ativo.findMany({
+      where: { clienteId: id },
+    });
+
+    return reply.send(ativos);
+  } catch (error) {
+    console.error(error);
+    return reply
+      .code(500)
+      .send({ message: "Erro ao buscar ativos do cliente." });
+  }
+}
+
 export async function updateClientHandler(
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
