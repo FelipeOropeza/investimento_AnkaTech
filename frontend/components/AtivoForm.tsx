@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ativoSchema, AtivoFormValues, AtivoFormData } from '@/types/ativo';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { api } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ativoSchema, AtivoFormData } from "@/types/ativo";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -14,40 +14,43 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
 interface AtivoFormProps {
-  clienteId: string;
+  clienteId: number;
 }
 
 export function AtivoForm({ clienteId }: AtivoFormProps) {
   const router = useRouter();
 
-  // Form recebe AtivoFormValues (com string)
-  const form = useForm<AtivoFormValues>({
+  const form = useForm<AtivoFormData>({
     resolver: zodResolver(ativoSchema),
     defaultValues: {
-      nome: '',
-      valorAtual: '',
+      nome: "",
+      valorAtual: 0,
     },
   });
 
   const onSubmit = async (data: AtivoFormData) => {
-  try {
-    await api.post(`/assets`, {
-      ...data,
-      clienteId: Number(clienteId),
-    });
-    router.push(`/clientes`);
-  } catch (error) {
-    console.error('Erro ao cadastrar ativo:', error);
-  }
-};
+    try {
+      await api.post("/assets", {
+        ...data,
+        clienteId: Number(clienteId),
+      });
 
+      router.push("/clientes");
+    } catch (error) {
+      console.error("Erro ao cadastrar ativo:", error);
+    }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4"
+        noValidate
+      >
         <FormField
           control={form.control}
           name="nome"
@@ -70,12 +73,14 @@ export function AtivoForm({ clienteId }: AtivoFormProps) {
               <FormLabel>Valor Atual (R$)</FormLabel>
               <FormControl>
                 <Input
-                  {...field}
                   type="number"
                   step="0.01"
                   min="0"
-                  value={field.value || ''}
-                  onChange={(e) => field.onChange(e.target.value)}
+                  value={field.value === 0 ? "" : field.value}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === "" ? 0 : parseFloat(val));
+                  }}
                 />
               </FormControl>
               <FormMessage />
